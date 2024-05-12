@@ -1,8 +1,7 @@
 # Rapid Ball
-Command Line Interface library, for developing CLI applications and games in C. It has functions to access keyboard, screen and manage timing tasks.
 
 ## Requirements
-- This library works with the follwing OS:
+- This game works with the follwing OS:
    - Linux based (Ubuntu, etc)
    - MacOS
 - It is necessary to have GCC installed.
@@ -12,7 +11,7 @@ The file `main.c` has an example of how to use the Keyboard, Screen nd Timer fun
 
 To build this example via command line, just switch to library root directory and type the following command:
 ```
-//gcc -o rapidball main.c screen.c keyboard.c timer.c -lm para compilar 
+//  gcc -o rapidball main.c screen.c keyboard.c timer.c -lm para compilar 
 
 ```
 
