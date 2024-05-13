@@ -13,3 +13,8 @@
 #define SCREEN_HEIGHT 20
 
 //gcc -o rapidball main.c screen.c keyboard.c timer.c -lm para compilar 
+
+int main() {
+    // seu código aqui
+    return 0;
+}
