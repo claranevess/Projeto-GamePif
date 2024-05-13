@@ -13,35 +13,61 @@
 #define SCREEN_HEIGHT 20
 
 //gcc -o rapidball main.c screen.c keyboard.c timer.c -lm para compilar
-// ./rapidball
-
-#define NUM_PLATFORMS 5
-
 // Definição da estrutura para as plataformas
-typedef struct {
+typedef struct Platform {
     int x;
     int y;
     int width;
+    struct Platform *next;
 } Platform;
 
-// Função para inicializar as plataformas
-void initPlatforms(Platform platforms[]) {
-    int i;
-    for (i = 0; i < NUM_PLATFORMS; i++) {
-        platforms[i].x = rand() % (SCREEN_WIDTH - 5) + 1;
-        platforms[i].y = rand() % (SCREEN_HEIGHT - 1) + 1;
-        platforms[i].width = rand() % 5 + 5;
-    }
+// Função para inicializar uma plataforma
+Platform *initPlatform(int x, int y, int width) {
+    Platform *platform = malloc(sizeof(Platform));
+    platform->x = x;
+    platform->y = y;
+    platform->width = width;
+    platform->next = NULL;
+    return platform;
+}
+
+// Função para adicionar uma nova plataforma
+Platform *addPlatform(Platform *head, int x, int y, int width) {
+    Platform *newPlatform = initPlatform(x, y, width);
+    newPlatform->next = head;
+    return newPlatform;
 }
 
 // Função para desenhar as plataformas
-void drawPlatforms(Platform platforms[]) {
-    int i, j;
-    for (i = 0; i < NUM_PLATFORMS; i++) {
-        for (j = 0; j < platforms[i].width; j++) {
-            drawCharacter(platforms[i].x + j, platforms[i].y, '=');
+void drawPlatforms(Platform *head) {
+    Platform *current = head;
+    while (current != NULL) {
+        int j;
+        for (j = 0; j < current->width; j++) {
+            drawCharacter(current->x + j, current->y, '=');
         }
+        current = current->next;
     }
+}
+
+// Função para liberar a memória das plataformas
+void freePlatforms(Platform *head) {
+    Platform *current = head;
+    while (current != NULL) {
+        Platform *temp = current;
+        current = current->next;
+        free(temp);
+    }
+}
+
+// Função para gerar uma nova plataforma aleatória
+Platform *generateRandomPlatform(int maxY) {
+    int x, y, width;
+    width = rand() % (PLATFORM_WIDTH_MAX - PLATFORM_WIDTH_MIN + 1) + PLATFORM_WIDTH_MIN;
+    y = rand() % (maxY - 1) + 1;
+    x = rand() % (SCREEN_WIDTH - width);
+    Platform *platform = initPlatform(x, y, width);
+    return platform;
 }
 
 int main() {
@@ -49,7 +75,9 @@ int main() {
     int directionY = 1;
     int ballX = SCREEN_WIDTH / 2;
     int ballY = 1;
-    Platform platforms[NUM_PLATFORMS];
+    int lives = 3;
+    int score = 0;
+    Platform *platforms = NULL;
 
     srand(time(NULL)); // Inicializa o gerador de números aleatórios com o tempo atual
 
@@ -59,11 +87,12 @@ int main() {
 
     maxY = getHeight();
 
-    initPlatforms(platforms);
-
     // Loop principal do jogo
-    while (true) {
+    while (lives > 0) {
         clearScreen();
+
+        // Adiciona uma nova plataforma aleatória
+        platforms = addPlatform(platforms, generateRandomPlatform(maxY));
 
         // Move a bola
         ballY += directionY;
@@ -74,14 +103,6 @@ int main() {
         // Desenha a bola
         drawCharacter(ballX, ballY, 'o');
 
-        // Colisão com as plataformas
-        int i;
-        for (i = 0; i < NUM_PLATFORMS; i++) {
-            if (ballY == platforms[i].y && ballX >= platforms[i].x && ballX < platforms[i].x + platforms[i].width) {
-                directionY *= -1;
-            }
-        }
-
         // Atualiza a tela
         refreshScreen();
         delay(50); // 50ms de delay
@@ -90,6 +111,9 @@ int main() {
     // Limpa a tela e encerra o jogo
     clearScreen();
     shutdownScreen();
+
+    // Libera a memória alocada para as plataformas
+    freePlatforms(platforms);
 
     return 0;
 }
