@@ -14,6 +14,7 @@
 #define COLOR_PLAYER 6
 #define COLOR_PLATFORM 2
 #define COLOR_SCORE 14
+#define COLOR_SPRINT 5
 
 // Estados do jogo
 #define STATE_MENU 0
@@ -33,7 +34,14 @@ typedef struct Player {
     int onPlatform;
 } Player;
 
+typedef struct Sprint {
+    int x;
+    int y;
+    int collected;
+} Sprint;
+
 Platform platforms[4];
+Sprint sprints[4];
 Player player;
 
 int score = 0;
@@ -42,17 +50,27 @@ int game_state = STATE_MENU;
 
 void InitializePlayer() {
     player.x = MAXX / 2;
-    player.y = MINY + 2;
+    player.y = MINX; // O jogador começa na parte de baixo da tela
     player.velocityY = 0;
     player.onPlatform = 0;
 }
 
 void InitializePlatforms() {
     srand(time(0));
+    int gap = MAXX / 4;
     for (int i = 0; i < 4; i++) {
-        platforms[i].x = rand() % (MAXX - 10) + 2;
+        platforms[i].x = i * gap + 2;
         platforms[i].y = MAXY - (i + 1) * 5;
         platforms[i].width = 15; // Tamanho da plataforma fixo em 15
+    }
+}
+
+void InitializeSprints() {
+    srand(time(0));
+    for (int i = 0; i < 4; i++) {
+        sprints[i].x = rand() % (MAXX - 2) + 1;
+        sprints[i].y = rand() % (MAXY - 10) + 5;
+        sprints[i].collected = 0;
     }
 }
 
@@ -103,13 +121,27 @@ void CheckCollision() {
     player.onPlatform = 0;
 }
 
+void CheckSprintCollision() {
+    for (int i = 0; i < 4; i++) {
+        if (!sprints[i].collected && player.x + 2 >= sprints[i].x && player.x <= sprints[i].x + 4 && player.y + 1 >= sprints[i].y && player.y <= sprints[i].y + 1) {
+            sprints[i].collected = 1;
+            score += 10; // Aumenta a pontuação quando o jogador coleta um sprint
+        }
+    }
+}
+
 void MovePlatforms() {
     for (int i = 0; i < 4; i++) {
         platforms[i].y--;
         if (platforms[i].y < MINY - 5) {
-            platforms[i].x = rand() % (MAXX - 10) + 2;
+            int gap = MAXX / 4;
+            platforms[i].x = i * gap + 2;
             platforms[i].y = MAXY + rand() % 5;
-            platforms[i].width = rand() % 10 + 5;
+            platforms[i].width = 15;
+
+            // Move os sprints para posições aleatórias
+            sprints[i].x = rand() % (MAXX - 2) + 1;
+            sprints[i].y = rand() % (MAXY - 10) + 5;
         }
     }
 }
@@ -127,6 +159,8 @@ void DrawMenu() {
 
     screenUpdate();
 }
+
+void DrawSprints(); // Protótipo da função DrawSprints()
 
 void Draw() {
     screenClear();
@@ -147,7 +181,21 @@ void Draw() {
     screenGotoxy(MAXX - 10, MINY);
     printf("SCORE: %d", score);
 
+    DrawSprints(); // Desenha os sprints na tela
+
     screenUpdate();
+}
+
+void DrawSprints() {
+    screenSetColor(COLOR_SPRINT, DARKGRAY);
+    for (int i = 0; i < 4; i++) {
+        if (!sprints[i].collected) {
+            screenGotoxy(sprints[i].x, sprints[i].y);
+            printf("%c%c%c%c", 219, 219, 219, 219);
+            screenGotoxy(sprints[i].x, sprints[i].y + 1);
+            printf("%c%c%c%c", 219, 219, 219, 219);
+        }
+    }
 }
 
 int main() {
@@ -170,6 +218,7 @@ int main() {
                 if (ch == 10) { // ENTER key
                     InitializePlayer();
                     InitializePlatforms();
+                    InitializeSprints(); // Inicializa os sprints
                     game_state = STATE_GAME;
                     ch = 0; // Resetar ch
                 }
@@ -188,6 +237,7 @@ int main() {
                     MovePlayer(direction);
                     ApplyGravity();
                     CheckCollision();
+                    CheckSprintCollision(); // Verifica a colisão com os sprints
                     Draw();
                 }
                 break;
