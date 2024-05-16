@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 #include "screen.h"
 #include "keyboard.h"
 #include "timer.h"
@@ -40,9 +41,15 @@ typedef struct Sprint {
     int collected;
 } Sprint;
 
+typedef struct Life {
+    char icon[3]; // Ícone da vida, representado por um coração
+    struct Life* next; // Próximo nó na lista
+} Life;
+
 Platform platforms[4];
 Sprint sprints[4];
 Player player;
+Life* lives_head = NULL;
 
 int score = 0;
 int game_over = 0;
@@ -71,6 +78,15 @@ void InitializeSprints() {
         sprints[i].x = rand() % (MAXX - 2) + 1;
         sprints[i].y = rand() % (MAXY - 10) + 5;
         sprints[i].collected = 0;
+    }
+}
+
+void InitializeLives() {
+    for (int i = 0; i < 3; i++) {
+        Life* new_life = (Life*)malloc(sizeof(Life));
+        strcpy(new_life->icon, "❤️ "); // Ícone do coração
+        new_life->next = lives_head;
+        lives_head = new_life;
     }
 }
 
@@ -111,8 +127,16 @@ void CheckCollision() {
     // Verifica se o jogador atingiu o topo da tela
     if (player.y <= MINY + 2) {
         if (player.onPlatform != 0) {
-            game_over = 1;
-            game_state = STATE_GAMEOVER;
+            // Remove uma vida
+            if (lives_head != NULL) {
+                Life* temp = lives_head;
+                lives_head = lives_head->next;
+                free(temp);
+                if (lives_head == NULL) {
+                    game_over = 1;
+                    game_state = STATE_GAMEOVER;
+                }
+            }
         } else {
             player.y = MAXY - 2; // Move o jogador para o fundo da tela
         }
@@ -162,6 +186,20 @@ void DrawMenu() {
 
 void DrawSprints(); // Protótipo da função DrawSprints()
 
+void DrawLives() {
+    Life* current_life = lives_head;
+    int x = MINX + 2;
+    int y = MINY + 2;
+
+    while (current_life != NULL) {
+        screenSetColor(COLOR_SCORE, DARKGRAY);
+        screenGotoxy(x, y);
+        printf("%s", current_life->icon);
+        x += 4; // Espaçamento entre os corações
+        current_life = current_life->next;
+    }
+}
+
 void Draw() {
     screenClear();
 
@@ -182,6 +220,7 @@ void Draw() {
     printf("SCORE: %d", score);
 
     DrawSprints(); // Desenha os sprints na tela
+    DrawLives(); // Desenha as vidas na tela
 
     screenUpdate();
 }
@@ -219,6 +258,7 @@ int main() {
                     InitializePlayer();
                     InitializePlatforms();
                     InitializeSprints(); // Inicializa os sprints
+                    InitializeLives(); // Inicializa as vidas
                     game_state = STATE_GAME;
                     ch = 0; // Resetar ch
                 }
@@ -262,6 +302,14 @@ int main() {
     keyboardDestroy();
     screenDestroy();
     timerDestroy();
+
+    // Libera a memória alocada para as vidas
+    Life* current_life = lives_head;
+    while (current_life != NULL) {
+        Life* temp = current_life;
+        current_life = current_life->next;
+        free(temp);
+    }
 
     return 0;
 }
