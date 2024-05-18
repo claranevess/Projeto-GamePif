@@ -95,16 +95,20 @@ void MovePlayer(int direction) {
         player.x -= 2;
     else if (direction == 1 && player.x < MAXX - 3)
         player.x += 2;
+    direction = 0; 
 }
+
 
 void ApplyGravity() {
     if (!player.onPlatform) {
         if (player.y < MAXY - 1) {
             player.velocityY += 0.2;
+            if (player.velocityY > 1.0) { // Limite a velocidadeY
+                player.velocityY = 1.0;
+            }
             player.y += player.velocityY;
         } else {
-            // Se o jogador cair, ele reaparece no topo da tela
-            player.y = MINY + 2;
+            player.y = MAXY - 1;
             player.velocityY = 0;
         }
     }
@@ -119,7 +123,7 @@ void CheckCollision() {
             player.x <= platforms[i].x + platforms[i].width) {
             player.y = platforms[i].y - 1;
             player.velocityY = 0;
-            player.onPlatform = i + 1;
+            player.onPlatform = 1;
             return;
         }
     }
@@ -139,9 +143,13 @@ void CheckCollision() {
             }
         } else {
             player.y = MAXY - 2; // Move o jogador para o fundo da tela
+            player.velocityY = 0;
         }
+    } else if (player.y > MAXY - 1) {
+        player.y = MAXY - 1;
+        player.velocityY = 0;
     }
-    
+
     player.onPlatform = 0;
 }
 
@@ -157,15 +165,14 @@ void CheckSprintCollision() {
 void MovePlatforms() {
     for (int i = 0; i < 4; i++) {
         platforms[i].y--;
-        if (platforms[i].y < MINY - 5) {
-            int gap = MAXX / 4;
-            platforms[i].x = i * gap + 2;
-            platforms[i].y = MAXY + rand() % 5;
-            platforms[i].width = 15;
+        if (platforms[i].y < MINY - 1) {
+            platforms[i].y = MAXY;
+            platforms[i].x = rand() % (MAXX - platforms[i].width) + 1;
 
-            // Move os sprints para posições aleatórias
-            sprints[i].x = rand() % (MAXX - 2) + 1;
+            // Reposiciona os sprints aleatoriamente quando a plataforma atinge o topo da tela
+            sprints[i].x = rand() % (MAXX - 4) + 1;
             sprints[i].y = rand() % (MAXY - 10) + 5;
+            sprints[i].collected = 0;
         }
     }
 }
@@ -174,15 +181,29 @@ void DrawMenu() {
     screenClear();
 
     screenSetColor(COLOR_SCORE, DARKGRAY);
-    screenGotoxy(MAXX / 2 - 6, MAXY / 2 - 2);
-    printf("RapidBall Game");
-    screenGotoxy(MAXX / 2 - 10, MAXY / 2);
+    screenGotoxy(MAXX / 2 - 9, MAXY / 2 - 4);
+    printf("### RAPIDBALL GAME ###");
+    screenGotoxy(MAXX / 2 - 11, MAXY / 2 - 2);
     printf("Pressione ENTER para jogar");
-    screenGotoxy(MAXX / 2 - 10, MAXY / 2 + 2);
+    screenGotoxy(MAXX / 2 - 11, MAXY / 2);
     printf("Pressione ESC para sair");
+
+    screenSetColor(COLOR_PLATFORM, DARKGRAY);
+    for (int i = 0; i < MAXX; i++) {
+        screenGotoxy(i, MAXY / 2 + 2);
+        printf("-");
+    }
+
+    screenGotoxy(MAXX / 2 - 8, MAXY / 2 + 4);
+    printf("Controles:");
+    screenGotoxy(MAXX / 2 - 8, MAXY / 2 + 5);
+    printf("A - Mover para a esquerda");
+    screenGotoxy(MAXX / 2 - 8, MAXY / 2 + 6);
+    printf("S - Mover para a direita");
 
     screenUpdate();
 }
+
 
 void DrawSprints(); // Protótipo da função DrawSprints()
 
@@ -237,12 +258,46 @@ void DrawSprints() {
     }
 }
 
+void DrawSplashScreen() {
+    screenClear();
+    screenSetColor(COLOR_SCORE, DARKGRAY);
+    screenGotoxy(10, 5);
+    printf("######     ##     ######    ####    #####    ######     ##     ####     ####");
+    screenGotoxy(10, 6);
+    printf(" ##  ##   ####     ##  ##    ##      ## ##    ##  ##   ####     ##       ##");
+    screenGotoxy(10, 7);
+    printf(" ##  ##  ##  ##    ##  ##    ##      ##  ##   ##  ##  ##  ##    ##       ##");
+    screenGotoxy(10, 8);
+    printf(" #####   ##  ##    #####     ##      ##  ##   #####   ##  ##    ##       ##");
+    screenGotoxy(10, 9);
+    printf(" ## ##   ######    ##        ##      ##  ##   ##  ##  ######    ##   #   ##   #");
+    screenGotoxy(10, 10);
+    printf(" ##  ##  ##  ##    ##        ##      ## ##    ##  ##  ##  ##    ##  ##   ##  ##");
+    screenGotoxy(10, 11);
+    printf("#### ##  ##  ##   ####      ####    #####    ######   ##  ##   #######  #######");
+
+    screenUpdate();
+
+    // Inicializa o timer para 3000 milissegundos (3 segundos)
+    timerInit(2000);
+
+    // Loop para esperar o tempo passar
+    while (!timerTimeOver()) {
+        // Não faça nada, apenas espere o timer expirar
+    }
+}
+
 int main() {
     static int ch = 0;
-    int direction = 0; // -1 for left, 1 for right
+    int direction = 0; 
 
     screenInit(1);
     keyboardInit();
+
+    // Desenhar a tela de splash antes de iniciar o jogo
+    DrawSplashScreen();
+
+    // Inicializa o timer principal para o loop do jogo
     timerInit(100);
 
     while (ch != 27) { // ESC key
@@ -259,6 +314,7 @@ int main() {
                     InitializePlatforms();
                     InitializeSprints(); // Inicializa os sprints
                     InitializeLives(); // Inicializa as vidas
+                    score = 0; // Reinicia a pontuação
                     game_state = STATE_GAME;
                     ch = 0; // Resetar ch
                 }
@@ -272,13 +328,15 @@ int main() {
                         direction = 1;
                 }
 
-                if (timerTimeOver() == 1) {
+                if (timerTimeOver()) {
                     MovePlatforms();
                     MovePlayer(direction);
                     ApplyGravity();
                     CheckCollision();
                     CheckSprintCollision(); // Verifica a colisão com os sprints
                     Draw();
+                    // Reinicia o timer após desenhar a tela
+                    timerUpdateTimer(100);
                 }
                 break;
             case STATE_GAMEOVER:
@@ -293,6 +351,7 @@ int main() {
                         ch = readch();
                     }
                 }
+                score = 0; // Reinicia a pontuação ao sair do estado GAMEOVER
                 game_state = STATE_MENU;
                 ch = 0; // Resetar ch
                 break;
