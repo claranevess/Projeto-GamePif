@@ -27,4 +27,4 @@ replacing the main.c file to your own.
 ## Objetivos
 - Ficar Vivo: O jogador deve evitar colidir com o topo da tela para permanecer vivo. Cada colisão com o topo resulta na perda de uma vida.
 - Vidas: O jogador começa com 3 vidas. Quando todas as vidas são perdidas, o jogo termina.
-- Pontuação: O jogador ganha pontos resgatando e colidindo com diferentes blocos que aparecem no jogo. O score é exibido no canto superior direito da tela.
+- Pontuação: O jogador ganha pontos colidindo com diferentes blocos que aparecem no jogo. O score é exibido no canto superior direito da tela.
