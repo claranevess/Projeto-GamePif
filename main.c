@@ -43,13 +43,13 @@ struct Sprint {
 
 struct Life {
     char icon[3]; // Ícone da vida, representado por um coração
-    struct Life* next; // Próximo nó na lista
+    struct Life *next; // Próximo nó na lista
 };
 
 struct Platform platforms[4];
 struct Sprint sprints[4];
 struct Player player;
-struct Life* lives_head = NULL;
+struct Life *lives_head = NULL;
 
 int score = 0;
 int game_over = 0;
@@ -83,7 +83,7 @@ void InitializeSprints() {
 
 void InitializeLives() {
     for (int i = 0; i < 3; i++) {
-        struct Life* new_life = (struct Life*)malloc(sizeof(struct Life));
+        struct Life *new_life = (struct Life*)malloc(sizeof(struct Life));
         strcpy(new_life->icon, "❤️ "); // Ícone do coração
         new_life->next = lives_head;
         lives_head = new_life;
@@ -133,7 +133,7 @@ void CheckCollision() {
         if (player.onPlatform != 0) {
             // Remove uma vida
             if (lives_head != NULL) {
-                struct Life* temp = lives_head;
+                struct Life *temp = lives_head;
                 lives_head = lives_head->next;
                 free(temp);
                 if (lives_head == NULL) {
@@ -208,7 +208,7 @@ void DrawMenu() {
 void DrawSprints(); // Protótipo da função DrawSprints()
 
 void DrawLives() {
-    struct Life* current_life = lives_head;
+    struct Life *current_life = lives_head;
     int x = MINX + 2;
     int y = MINY + 2;
 
@@ -363,9 +363,9 @@ int main() {
     timerDestroy();
 
     // Libera a memória alocada para as vidas
-    struct Life* current_life = lives_head;
+    struct Life *current_life = lives_head;
     while (current_life != NULL) {
-        struct Life* temp = current_life;
+        struct Life *temp = current_life;
         current_life = current_life->next;
         free(temp);
     }
