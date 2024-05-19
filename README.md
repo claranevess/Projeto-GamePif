@@ -11,7 +11,7 @@ The file `main.c` has an example of how to use the Keyboard, Screen nd Timer fun
 
 To build this example via command line, just switch to library root directory and type the following command:
 ```
-//  gcc -o rapidball main.c screen.c keyboard.c timer.c -lm para compilar 
+//  gcc -o rapidball main.c screen.c keyboard.c timer.c -lm
 
 ```
 
