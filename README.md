@@ -1,5 +1,5 @@
 # Rapid Ball
-Projeto da matéria de Programação Imperativa Funcional, do segundo período de Ciência da Computação na Cesar School.
+Projeto do segundo período de Ciência da Computação na Cesar School da matéria de Programação Imperativa Funcional.
 
 ## Requisitos
 - Este jogo funciona com o sistema operacional a seguir:
@@ -22,3 +22,9 @@ Logo em seguida, digitar essa segunda linha:
 To use this library to create your own apps, simply add source and header files to your project and compile it together with your own code, 
 replacing the main.c file to your own.
 
+## Iniciando o Jogo
+1 - Aperte em enter para iniciar
+## Objetivos
+- Ficar Vivo: O jogador deve evitar colidir com o topo da tela para permanecer vivo. Cada colisão com o topo resulta na perda de uma vida.
+- Vidas: O jogador começa com 3 vidas. Quando todas as vidas são perdidas, o jogo termina.
+- Pontuação: O jogador ganha pontos resgatando e colidindo com diferentes blocos que aparecem no jogo. O score é exibido no canto superior direito da tela.
