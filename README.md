@@ -1,20 +1,24 @@
 # Rapid Ball
+Projeto da matéria de Programação Imperativa Funcional, do segundo período de Ciência da Computação na Cesar School.
 
-## Requirements
-- This game works with the follwing OS:
+## Requisitos
+- Este jogo funciona com o sistema operacional a seguir:
    - Linux based (Ubuntu, etc)
    - MacOS
-- It is necessary to have GCC installed.
+- É necessário ter o GCC instalado.
 
-## Usage 
-The file `main.c` has an example of how to use the Keyboard, Screen nd Timer functions. 
+## Passos para jogar o Rapid Ball
 
-To build this example via command line, just switch to library root directory and type the following command:
+Primeiro é necessário verificar que as bibliotecas e o arquivo main.c que estão presentes no GitHub estão no mesmo arquivo diretório da sua máquina e rodar a seguinte linha de comando:
 ```
 //  gcc -o rapidball main.c screen.c keyboard.c timer.c -lm
 
 ```
+Logo em seguida, digitar essa segunda linha:
+```
+//  ./rapidball
 
+```
 To use this library to create your own apps, simply add source and header files to your project and compile it together with your own code, 
 replacing the main.c file to your own.
 
