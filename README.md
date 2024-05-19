@@ -1,20 +1,28 @@
 # Rapid Ball
+Projeto do segundo período de Ciência da Computação na Cesar School da matéria de Programação Imperativa Funcional.
 
-## Requirements
-- This game works with the follwing OS:
+## Requisitos
+- Este jogo funciona com os sistemas operacionais a seguir:
    - Linux based (Ubuntu, etc)
    - MacOS
-- It is necessary to have GCC installed.
+- É necessário ter o GCC instalado.
 
-## Usage 
-The file `main.c` has an example of how to use the Keyboard, Screen nd Timer functions. 
+## Passos para jogar o Rapid Ball
 
-To build this example via command line, just switch to library root directory and type the following command:
+Primeiro é necessário verificar se as bibliotecas e o arquivo main.c que estão presentes no GitHub estão no mesmo arquivo diretório da sua máquina e rodar a seguinte linha de comando:
 ```
-//  gcc -o rapidball main.c screen.c keyboard.c timer.c -lm para compilar 
+gcc -o rapidball main.c screen.c keyboard.c timer.c -lm
+
+```
+Logo em seguida, digitar essa segunda linha:
+```
+./rapidball
 
 ```
 
-To use this library to create your own apps, simply add source and header files to your project and compile it together with your own code, 
-replacing the main.c file to your own.
-
+## Iniciando o Jogo
+1 - Aperte em enter para iniciar
+## Objetivos do Jogo
+- Ficar Vivo: O jogador deve evitar colidir com o topo da tela para permanecer vivo. Cada colisão com o topo resulta na perda de uma vida.
+- Vidas: O jogador começa com 3 vidas. Quando todas as vidas são perdidas, o jogo termina.
+- Pontuação: O jogador ganha pontos colidindo com diferentes blocos que aparecem no jogo. O score é exibido no canto superior direito da tela.
