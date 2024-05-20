@@ -21,6 +21,7 @@
 #define STATE_MENU 0
 #define STATE_GAME 1
 #define STATE_GAMEOVER 2
+#define MAX_SCORES 10
 
 struct Platform {
     int x;
@@ -46,14 +47,21 @@ struct Life {
     struct Life *next; // Próximo nó na lista
 };
 
+struct HighScore {
+    char name[50];
+    int score;
+};
+
 struct Platform platforms[4];
 struct Sprint sprints[4];
 struct Player player;
 struct Life *lives_head = NULL;
+struct HighScore high_scores[MAX_SCORES];
 
 int score = 0;
 int game_over = 0;
 int game_state = STATE_MENU;
+int num_high_scores = 0;
 
 void InitializePlayer() {
     player.x = MAXX / 2;
@@ -287,12 +295,82 @@ void DrawSplashScreen() {
     }
 }
 
+// Funções de Escrita e Leitura de Arquivos
+
+void WriteHighScoresToFile() {
+    FILE *file = fopen("highscores.txt", "w");
+    if (file != NULL) {
+        for (int i = 0; i < num_high_scores; i++) {
+            fprintf(file, "%s %d\n", high_scores[i].name, high_scores[i].score);
+        }
+        fclose(file);
+    } else {
+        printf("Erro ao abrir o arquivo para escrita.\n");
+    }
+}
+
+void ReadHighScoresFromFile() {
+    FILE *file = fopen("highscores.txt", "r");
+    if (file != NULL) {
+        num_high_scores = 0;
+        while (fscanf(file, "%s %d", high_scores[num_high_scores].name, &high_scores[num_high_scores].score) != EOF) {
+            num_high_scores++;
+            if (num_high_scores >= MAX_SCORES) {
+                break;
+            }
+        }
+        fclose(file);
+    } else {
+        printf("Erro ao abrir o arquivo para leitura.\n");
+    }
+}
+
+void AddHighScore(char *name, int score) {
+    if (num_high_scores < MAX_SCORES) {
+        strcpy(high_scores[num_high_scores].name, name);
+        high_scores[num_high_scores].score = score;
+        num_high_scores++;
+    } else {
+        // Encontra a posição para inserir a nova pontuação
+        int pos = MAX_SCORES - 1;
+        while (pos > 0 && score > high_scores[pos - 1].score) {
+            strcpy(high_scores[pos].name, high_scores[pos - 1].name);
+            high_scores[pos].score = high_scores[pos - 1].score;
+            pos--;
+        }
+        strcpy(high_scores[pos].name, name);
+        high_scores[pos].score = score;
+    }
+}
+
+void DrawHighScores() {
+    screenClear();
+
+    screenSetColor(COLOR_SCORE, DARKGRAY);
+    screenGotoxy(MAXX / 2 - 9, 3);
+    printf("HIGH SCORES");
+    for (int i = 0; i < num_high_scores; i++) {
+        screenGotoxy(MAXX / 2 - 9, 5 + i);
+        printf("%d. %s - %d", i + 1, high_scores[i].name, high_scores[i].score);
+    }
+
+    screenGotoxy(MAXX / 2 - 11, MAXY - 1);
+    printf("Pressione ENTER para voltar ao menu");
+
+    screenUpdate();
+
+    while (readch() != 10) {} // Espera até que a tecla ENTER seja pressionada
+}
+
 int main() {
     static int ch = 0;
     int direction = 0; 
 
     screenInit(1);
     keyboardInit();
+
+    // Carregar as pontuações máximas do arquivo
+    ReadHighScoresFromFile();
 
     // Desenhar a tela de splash antes de iniciar o jogo
     DrawSplashScreen();
@@ -304,7 +382,7 @@ int main() {
         switch (game_state) {
             case STATE_MENU:
                 DrawMenu();
-                while (ch != 10 && ch != 27) { // ENTER key or ESC key
+                while (ch != 10 && ch != 27 && ch != 49) { // ENTER key, ESC key, or '1' key
                     if (keyhit()) {
                         ch = readch();
                     }
@@ -316,6 +394,9 @@ int main() {
                     InitializeLives(); // Inicializa as vidas
                     score = 0; // Reinicia a pontuação
                     game_state = STATE_GAME;
+                    ch = 0; // Resetar ch
+                } else if (ch == 49) { // '1' key
+                    DrawHighScores(); // Mostrar as pontuações máximas
                     ch = 0; // Resetar ch
                 }
                 break;
@@ -344,6 +425,12 @@ int main() {
                 screenGotoxy(MAXX / 2 - 5, MAXY / 2);
                 printf("GAME OVER!");
                 screenGotoxy(MAXX / 2 - 8, MAXY / 2 + 2);
+                printf("Insira seu nome: ");
+                char player_name[50];
+                scanf("%s", player_name); // Captura o nome do jogador
+                AddHighScore(player_name, score); // Adiciona a pontuação máxima do jogador
+                WriteHighScoresToFile(); // Escreve as pontuações máximas no arquivo
+                screenGotoxy(MAXX / 2 - 8, MAXY / 2 + 4);
                 printf("Pressione ENTER para sair");
                 screenUpdate();
                 while (ch != 10) { // ENTER key
