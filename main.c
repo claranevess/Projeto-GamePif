@@ -6,8 +6,6 @@
 #include "keyboard.h"
 #include "timer.h"
 
-#define MAXX 80
-#define MAXY 24
 #define MINX 1
 #define MINY 1
 
@@ -21,7 +19,9 @@
 #define STATE_MENU 0
 #define STATE_GAME 1
 #define STATE_GAMEOVER 2
+
 #define MAX_SCORES 10
+#define SCORE_FILE "scores.txt"
 
 struct Platform {
     int x;
@@ -47,21 +47,19 @@ struct Life {
     struct Life *next; // Próximo nó na lista
 };
 
-struct HighScore {
-    char name[50];
-    int score;
-};
-
 struct Platform platforms[4];
 struct Sprint sprints[4];
 struct Player player;
 struct Life *lives_head = NULL;
-struct HighScore high_scores[MAX_SCORES];
 
 int score = 0;
 int game_over = 0;
 int game_state = STATE_MENU;
-int num_high_scores = 0;
+
+struct Score {
+    int score;
+    char name[50];
+} scores[MAX_SCORES];
 
 void InitializePlayer() {
     player.x = MAXX / 2;
@@ -105,7 +103,6 @@ void MovePlayer(int direction) {
         player.x += 2;
     direction = 0; 
 }
-
 
 void ApplyGravity() {
     if (!player.onPlatform) {
@@ -189,29 +186,30 @@ void DrawMenu() {
     screenClear();
 
     screenSetColor(COLOR_SCORE, DARKGRAY);
-    screenGotoxy(MAXX / 2 - 9, MAXY / 2 - 4);
+    screenGotoxy(MAXX / 2 - 10, MAXY / 2 - 4);
     printf("### RAPIDBALL GAME ###");
-    screenGotoxy(MAXX / 2 - 11, MAXY / 2 - 2);
+    screenGotoxy(MAXX / 2 - 14, MAXY / 2 - 2);
     printf("Pressione ENTER para jogar");
-    screenGotoxy(MAXX / 2 - 11, MAXY / 2);
+    screenGotoxy(MAXX / 2 - 14, MAXY / 2);
+    printf("Pressione T para ver o Top Scores");
+    screenGotoxy(MAXX / 2 - 14, MAXY / 2 + 2);
     printf("Pressione ESC para sair");
 
     screenSetColor(COLOR_PLATFORM, DARKGRAY);
     for (int i = 0; i < MAXX; i++) {
-        screenGotoxy(i, MAXY / 2 + 2);
+        screenGotoxy(i, MAXY / 2 + 4);
         printf("-");
     }
 
-    screenGotoxy(MAXX / 2 - 8, MAXY / 2 + 4);
-    printf("Controles:");
-    screenGotoxy(MAXX / 2 - 8, MAXY / 2 + 5);
-    printf("A - Mover para a esquerda");
     screenGotoxy(MAXX / 2 - 8, MAXY / 2 + 6);
+    printf("Controles:");
+    screenGotoxy(MAXX / 2 - 8, MAXY / 2 + 7);
+    printf("A - Mover para a esquerda");
+    screenGotoxy(MAXX / 2 - 8, MAXY / 2 + 8);
     printf("S - Mover para a direita");
 
     screenUpdate();
 }
-
 
 void DrawSprints(); // Protótipo da função DrawSprints()
 
@@ -244,12 +242,13 @@ void Draw() {
         }
     }
 
-    screenSetColor(COLOR_SCORE, DARKGRAY);
-    screenGotoxy(MAXX - 10, MINY);
-    printf("SCORE: %d", score);
+    DrawSprints(); // Chama a função para desenhar os sprints
+    DrawLives(); // Chama a função para desenhar as vidas
 
-    DrawSprints(); // Desenha os sprints na tela
-    DrawLives(); // Desenha as vidas na tela
+    // Desenhar a pontuação
+    screenSetColor(COLOR_SCORE, DARKGRAY);
+    screenGotoxy(MAXX - 20, MINY + 1);
+    printf("Pontuação: %d", score);
 
     screenUpdate();
 }
@@ -295,82 +294,73 @@ void DrawSplashScreen() {
     }
 }
 
-// Funções de Escrita e Leitura de Arquivos
-
-void WriteHighScoresToFile() {
-    FILE *file = fopen("highscores.txt", "w");
-    if (file != NULL) {
-        for (int i = 0; i < num_high_scores; i++) {
-            fprintf(file, "%s %d\n", high_scores[i].name, high_scores[i].score);
+void SaveScores() {
+    FILE *file = fopen(SCORE_FILE, "w");
+    if (file) {
+        for (int i = 0; i < MAX_SCORES; i++) {
+            fprintf(file, "%s %d\n", scores[i].name, scores[i].score);
         }
         fclose(file);
-    } else {
-        printf("Erro ao abrir o arquivo para escrita.\n");
     }
 }
 
-void ReadHighScoresFromFile() {
-    FILE *file = fopen("highscores.txt", "r");
-    if (file != NULL) {
-        num_high_scores = 0;
-        while (fscanf(file, "%s %d", high_scores[num_high_scores].name, &high_scores[num_high_scores].score) != EOF) {
-            num_high_scores++;
-            if (num_high_scores >= MAX_SCORES) {
+void LoadScores() {
+    FILE *file = fopen(SCORE_FILE, "r");
+    if (file) {
+        for (int i = 0; i < MAX_SCORES; i++) {
+            fscanf(file, "%s %d", scores[i].name, &scores[i].score);
+        }
+        fclose(file);
+    } else {
+        // Se o arquivo não existir, inicializa os scores com valores padrão
+        for (int i = 0; i < MAX_SCORES; i++) {
+            strcpy(scores[i].name, "AAA");
+            scores[i].score = 0;
+        }
+    }
+}
+
+void DrawTopScores() {
+    screenClear();
+    screenSetColor(COLOR_SCORE, DARKGRAY);
+    screenGotoxy(MAXX / 2 - 6, MINY);
+    printf("TOP 10 SCORES");
+    for (int i = 0; i < MAX_SCORES; i++) {
+        screenGotoxy(MAXX / 2 - 8, MINY + 2 + i);
+        printf("%d. %s - %d", i + 1, scores[i].name, scores[i].score);
+    }
+    screenUpdate();
+}
+
+void CheckNewScore() {
+    if (score > scores[MAX_SCORES - 1].score) {
+        // Adiciona a nova pontuação na lista
+        strcpy(scores[MAX_SCORES - 1].name, "VOCÊ");
+        scores[MAX_SCORES - 1].score = score;
+
+        // Ordena a lista de scores
+        for (int i = MAX_SCORES - 1; i > 0; i--) {
+            if (scores[i].score > scores[i - 1].score) {
+                struct Score temp = scores[i];
+                scores[i] = scores[i - 1];
+                scores[i - 1] = temp;
+            } else {
                 break;
             }
         }
-        fclose(file);
-    } else {
-        printf("Erro ao abrir o arquivo para leitura.\n");
+        SaveScores();
     }
-}
-
-void AddHighScore(char *name, int score) {
-    if (num_high_scores < MAX_SCORES) {
-        strcpy(high_scores[num_high_scores].name, name);
-        high_scores[num_high_scores].score = score;
-        num_high_scores++;
-    } else {
-        // Encontra a posição para inserir a nova pontuação
-        int pos = MAX_SCORES - 1;
-        while (pos > 0 && score > high_scores[pos - 1].score) {
-            strcpy(high_scores[pos].name, high_scores[pos - 1].name);
-            high_scores[pos].score = high_scores[pos - 1].score;
-            pos--;
-        }
-        strcpy(high_scores[pos].name, name);
-        high_scores[pos].score = score;
-    }
-}
-
-void DrawHighScores() {
-    screenClear();
-
-    screenSetColor(COLOR_SCORE, DARKGRAY);
-    screenGotoxy(MAXX / 2 - 9, 3);
-    printf("HIGH SCORES");
-    for (int i = 0; i < num_high_scores; i++) {
-        screenGotoxy(MAXX / 2 - 9, 5 + i);
-        printf("%d. %s - %d", i + 1, high_scores[i].name, high_scores[i].score);
-    }
-
-    screenGotoxy(MAXX / 2 - 11, MAXY - 1);
-    printf("Pressione ENTER para voltar ao menu");
-
-    screenUpdate();
-
-    while (readch() != 10) {} // Espera até que a tecla ENTER seja pressionada
 }
 
 int main() {
     static int ch = 0;
-    int direction = 0; 
+    int direction = 0;
 
     screenInit(1);
     keyboardInit();
 
-    // Carregar as pontuações máximas do arquivo
-    ReadHighScoresFromFile();
+    // Carrega os scores do arquivo
+    LoadScores();
 
     // Desenhar a tela de splash antes de iniciar o jogo
     DrawSplashScreen();
@@ -382,7 +372,7 @@ int main() {
         switch (game_state) {
             case STATE_MENU:
                 DrawMenu();
-                while (ch != 10 && ch != 27 && ch != 49) { // ENTER key, ESC key, or '1' key
+                while (ch != 10 && ch != 27 && ch != 116) { // ENTER key or ESC key or 'T' key
                     if (keyhit()) {
                         ch = readch();
                     }
@@ -395,8 +385,13 @@ int main() {
                     score = 0; // Reinicia a pontuação
                     game_state = STATE_GAME;
                     ch = 0; // Resetar ch
-                } else if (ch == 49) { // '1' key
-                    DrawHighScores(); // Mostrar as pontuações máximas
+                } else if (ch == 116) { // 'T' key
+                    DrawTopScores();
+                    while (ch != 10 && ch != 27) { // ENTER key or ESC key
+                        if (keyhit()) {
+                            ch = readch();
+                        }
+                    }
                     ch = 0; // Resetar ch
                 }
                 break;
@@ -421,16 +416,11 @@ int main() {
                 }
                 break;
             case STATE_GAMEOVER:
+                CheckNewScore(); // Verifica se o novo score está entre os melhores
                 screenClear();
                 screenGotoxy(MAXX / 2 - 5, MAXY / 2);
                 printf("GAME OVER!");
                 screenGotoxy(MAXX / 2 - 8, MAXY / 2 + 2);
-                printf("Insira seu nome: ");
-                char player_name[50];
-                scanf("%s", player_name); // Captura o nome do jogador
-                AddHighScore(player_name, score); // Adiciona a pontuação máxima do jogador
-                WriteHighScoresToFile(); // Escreve as pontuações máximas no arquivo
-                screenGotoxy(MAXX / 2 - 8, MAXY / 2 + 4);
                 printf("Pressione ENTER para sair");
                 screenUpdate();
                 while (ch != 10) { // ENTER key
@@ -438,7 +428,6 @@ int main() {
                         ch = readch();
                     }
                 }
-                score = 0; // Reinicia a pontuação ao sair do estado GAMEOVER
                 game_state = STATE_MENU;
                 ch = 0; // Resetar ch
                 break;
