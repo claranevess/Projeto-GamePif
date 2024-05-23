@@ -63,23 +63,17 @@ void DrawSplashScreen() {
     screenClear();
     screenSetColor(COLOR_SCORE, DARKGRAY);
     screenGotoxy(10, 5);
-    printf("######     ##     ######    ####    #####    ######     ##     ####     ####");
+    printf(" ____   __   ____  __  ____  ____   __   __    __   ");
     screenGotoxy(10, 6);
-    printf(" ##  ##   ####     ##  ##    ##      ## ##    ##  ##   ####     ##       ##");
+    printf("(  _ \\ / _\\ (  _ \\(  )(    \\(  _ \\ / _\\ (  )  (  )  ");
     screenGotoxy(10, 7);
-    printf(" ##  ##  ##  ##    ##  ##    ##      ##  ##   ##  ##  ##  ##    ##       ##");
+    printf(" )   //    \\ ) __/ )(  ) D ( ) _ (/    \\/ (_/\\/ (_/\\");
     screenGotoxy(10, 8);
-    printf(" #####   ##  ##    #####     ##      ##  ##   #####   ##  ##    ##       ##");
-    screenGotoxy(10, 9);
-    printf(" ## ##   ######    ##        ##      ##  ##   ##  ##  ######    ##   #   ##   #");
-    screenGotoxy(10, 10);
-    printf(" ##  ##  ##  ##    ##        ##      ## ##    ##  ##  ##  ##    ##  ##   ##  ##");
-    screenGotoxy(10, 11);
-    printf("#### ##  ##  ##   ####      ####    #####    ######   ##  ##   #######  #######");
+    printf("(__\\_)\\_/\\_/(__)  (__)(____/(____/\\_/\\_/\\____/\\____/");
 
     screenUpdate();
 
-    // Inicializa o timer para 3000 milissegundos (3 segundos)
+    // Inicializa o timer para 2000 milissegundos (2 segundos)
     timerInit(2000);
 
     // Loop para esperar o tempo passar
