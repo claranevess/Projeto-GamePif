@@ -3,6 +3,7 @@
 #include "life.h"
 #include "screen.h"
 #include "game.h"
+#include <stdlib.h>
 
 struct Player player;
 
@@ -13,12 +14,12 @@ void InitializePlayer() {
     player.onPlatform = 0;
 }
 
-void MovePlayer(int direction) {
-    if (direction == -1 && player.x > MINX + 2)
+// Em player.c
+void MovePlayer() {
+    if (player.x > MINX + 2)
         player.x -= 2;
-    else if (direction == 1 && player.x < MAXX - 3)
+    else if (player.x < MAXX - 3)
         player.x += 2;
-    direction = 0; 
 }
 
 void ApplyGravity() {

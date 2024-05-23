@@ -20,7 +20,7 @@ void InitializePlayer();
 void InitializePlatforms();
 void InitializeSprints();
 void InitializeLives();
-void MovePlayer(int direction);
+void MovePlayer();
 void ApplyGravity();
 void CheckCollision();
 void CheckSprintCollision();

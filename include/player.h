@@ -11,7 +11,7 @@ struct Player {
 extern struct Player player; // Adicione esta linha
 
 void InitializePlayer();
-void MovePlayer(int direction);
+void MovePlayer();
 void ApplyGravity();
 void CheckCollision();
 
