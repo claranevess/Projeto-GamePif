@@ -2,6 +2,7 @@
 #include "platform.h"
 #include "life.h"
 #include "screen.h"
+#include "game.h"
 
 struct Player player;
 

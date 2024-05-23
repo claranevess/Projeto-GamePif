@@ -2,6 +2,7 @@
 #include <time.h>
 #include "platform.h"
 #include "screen.h"
+#include "sprint.h"
 
 struct Platform platforms[4];
 

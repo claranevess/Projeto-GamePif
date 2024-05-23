@@ -14,6 +14,7 @@
 
 extern int score; // Adicione esta linha
 extern int game_state; // Adicione esta linha
+extern int game_over;
 
 void InitializePlayer();
 void InitializePlatforms();
