@@ -11,14 +11,25 @@ Projeto do segundo período de Ciência da Computação na Cesar School da maté
 
 Primeiro é necessário verificar se as bibliotecas e o arquivo main.c que estão presentes no GitHub estão no mesmo arquivo diretório da sua máquina e rodar a seguinte linha de comando:
 ```
-gcc -o rapidball main.c screen.c keyboard.c timer.c -lm
-
+gcc -Wall -Iinclude -c src/main.c -o src/main.o
+gcc -Wall -Iinclude -c src/game.c -o src/game.o
+gcc -Wall -Iinclude -c src/player.c -o src/player.o
+gcc -Wall -Iinclude -c src/platform.c -o src/platform.o
+gcc -Wall -Iinclude -c src/sprint.c -o src/sprint.o
+gcc -Wall -Iinclude -c src/life.c -o src/life.o
+gcc -Wall -Iinclude -c src/score.c -o src/score.o
+gcc -Wall -Iinclude -c src/screen.c -o src/screen.o
+gcc -Wall -Iinclude -c src/keyboard.c -o src/keyboard.o
+gcc -Wall -Iinclude -c src/timer.c -o src/timer.o
 ```
 Logo em seguida, digitar essa segunda linha:
 ```
-./rapidball
-
+gcc src/*.o -o rapidball
 ```
+para, finalmente, executar o jogo: 
+````
+./rapidball
+````
 
 ## Iniciando o Jogo
 1 - Aperte em enter para iniciar
