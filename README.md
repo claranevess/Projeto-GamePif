@@ -16,7 +16,7 @@ make
 Logo em seguida, digitar essa segunda linha:
 ```
 make run
-
+```
 ## Iniciando o Jogo
 1 - Aperte em enter para iniciar
 ## Objetivos do Jogo
