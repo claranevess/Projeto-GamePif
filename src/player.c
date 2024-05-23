@@ -14,12 +14,12 @@ void InitializePlayer() {
     player.onPlatform = 0;
 }
 
-// Em player.c
-void MovePlayer() {
-    if (player.x > MINX + 2)
+void MovePlayer(int direction) {
+    if (direction == -1 && player.x > MINX + 2) {
         player.x -= 2;
-    else if (player.x < MAXX - 3)
+    } else if (direction == 1 && player.x < MAXX - 3) {
         player.x += 2;
+    }
 }
 
 void ApplyGravity() {
