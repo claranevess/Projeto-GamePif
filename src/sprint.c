@@ -18,7 +18,7 @@ void InitializeSprints() {
 
 void CheckSprintCollision() {
     for (int i = 0; i < 4; i++) {
-        if (!sprints[i].collected && player.x + 2 >= sprints[i].x && player.x <= sprints[i].x + 4 && player.y + 1 >= sprints[i].y && player.y <= sprints[i].y + 1) {
+        if (!sprints[i].collected && player.x + 2 >= sprints[i].x && player.x <= sprints[i].x + 1 && player.y + 1 >= sprints[i].y && player.y <= sprints[i].y + 1) {
             sprints[i].collected = 1;
             score += 10; // Aumenta a pontuação quando o jogador coleta um sprint
         }
@@ -30,9 +30,7 @@ void DrawSprints() {
     for (int i = 0; i < 4; i++) {
         if (!sprints[i].collected) {
             screenGotoxy(sprints[i].x, sprints[i].y);
-            printf("%c%c%c%c", 219, 219, 219, 219);
-            screenGotoxy(sprints[i].x, sprints[i].y + 1);
-            printf("%c%c%c%c", 219, 219, 219, 219);
+            printf("🪙");
         }
     }
 }

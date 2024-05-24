@@ -87,7 +87,7 @@ void Draw() {
 
     screenSetColor(COLOR_PLAYER, DARKGRAY);
     screenGotoxy((int)player.x, (int)player.y);
-    printf("  %c", 219);
+    printf("🔴");
 
     screenSetColor(COLOR_PLATFORM, DARKGRAY);
     for (int i = 0; i < 4; i++) {
