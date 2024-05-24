@@ -91,9 +91,9 @@ void Draw() {
 
     screenSetColor(COLOR_PLATFORM, DARKGRAY);
     for (int i = 0; i < 4; i++) {
+        screenGotoxy(platforms[i].x, platforms[i].y);
         for (int j = 0; j < platforms[i].width; j++) {
-            screenGotoxy(platforms[i].x + j, platforms[i].y);
-            printf("%c", 219);
+            printf("█"); // Alternativa com caractere ASCII
         }
     }
 
