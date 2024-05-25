@@ -18,6 +18,7 @@ int main() {
 
     // Desenhar a tela de splash antes de iniciar o jogo
     DrawSplashScreen();
+    DrawPlayerName();
 
     // Inicializa o timer principal para o loop do jogo
     timerInit(100);

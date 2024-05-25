@@ -30,12 +30,16 @@ int score = 0;
 int game_over = 0;
 int game_state = STATE_MENU;
 
+char playerName[50]; // Variável para armazenar o nome do jogador
+
 void DrawMenu() {
     screenClear();
 
     screenSetColor(COLOR_SCORE, DARKGRAY);
     screenGotoxy(MAXX / 2 - 10, MAXY / 2 - 4);
     printf("### RAPIDBALL GAME ###");
+    screenGotoxy(MAXX / 2 - 10, MAXY / 2 - 6);
+    printf("Bem-vindo, %s!", playerName); // Exibe o nome do jogador
     screenGotoxy(MAXX / 2 - 14, MAXY / 2 - 2);
     printf("Pressione ENTER para jogar");
     screenGotoxy(MAXX / 2 - 14, MAXY / 2);
@@ -81,6 +85,25 @@ void DrawSplashScreen() {
         // Não faça nada, apenas espere o timer expirar
     }
 }
+void DrawPlayerName(){
+    screenClear();
+    screenSetColor(COLOR_SCORE, DARKGRAY);
+    screenGotoxy(MAXX / 2 - 10, MAXY / 2 - 6);
+    printf("Digite seu nome: ");
+    char ch = getchar();
+    int i = 0, l = 0;
+    while(ch != '\n' && i<50){
+        playerName[i] = ch;
+        screenSetColor(COLOR_SCORE, DARKGRAY);
+        screenGotoxy(MAXX / 2 - 10 + l, MAXY / 2 - 5);
+        printf("%c", ch);
+        l++;
+        ch = getchar();
+        i++;
+    }
+    playerName[i] = '\0';
+    screenUpdate();
+}
 
 void Draw() {
     screenClear();
@@ -100,9 +123,14 @@ void Draw() {
     DrawSprints(); // Chama a função para desenhar os sprints
     DrawLives(); // Chama a função para desenhar as vidas
 
-    // Desenhar a pontuação
+    // Exibe o nome do jogador durante o jogo
     screenSetColor(COLOR_SCORE, DARKGRAY);
     screenGotoxy(MAXX - 20, MINY + 1);
+    printf("Jogador: %s", playerName);
+
+    // Desenhar a pontuação
+    screenSetColor(COLOR_SCORE, DARKGRAY);
+    screenGotoxy(MAXX - 20, MINY + 2);
     printf("Pontuação: %d", score);
 
     screenUpdate();
