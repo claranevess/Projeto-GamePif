@@ -6,6 +6,7 @@
 #include "game.h" // Inclua o cabeçalho onde score está definido
 
 struct Score scores[MAX_SCORES];
+extern char playerName[50]; // Declaração externa de playerName
 
 void SaveScores() {
     FILE *file = fopen(SCORE_FILE, "w");
@@ -48,7 +49,7 @@ void DrawTopScores() {
 void CheckNewScore() {
     if (score > scores[MAX_SCORES - 1].score) {
         // Adiciona a nova pontuação na lista
-        strcpy(scores[MAX_SCORES - 1].name, "VOCÊ");
+        strcpy(scores[MAX_SCORES - 1].name, playerName);
         scores[MAX_SCORES - 1].score = score;
 
         // Ordena a lista de scores

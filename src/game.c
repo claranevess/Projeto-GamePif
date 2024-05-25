@@ -93,13 +93,24 @@ void DrawPlayerName(){
     char ch = getchar();
     int i = 0, l = 0;
     while(ch != '\n' && i<50){
-        playerName[i] = ch;
-        screenSetColor(COLOR_SCORE, DARKGRAY);
-        screenGotoxy(MAXX / 2 - 10 + l, MAXY / 2 - 5);
-        printf("%c", ch);
-        l++;
-        ch = getchar();
-        i++;
+        if (ch == 127) {
+            // Se a tecla Delete for pressionada (código ASCII 127), apague o caractere anterior
+            if (i > 0) {
+                i--;
+                l--;
+                screenSetColor(COLOR_SCORE, DARKGRAY);
+                screenGotoxy(MAXX / 2 - 10 + l, MAXY / 2 - 5);
+                printf(" "); // Apaga o caractere da tela
+            }
+        } else {
+            playerName[i] = ch;
+            screenSetColor(COLOR_SCORE, DARKGRAY);
+            screenGotoxy(MAXX / 2 - 10 + l, MAXY / 2 - 5);
+            printf("%c", ch);
+            l++;
+            i++;
+        }
+    ch = getchar();
     }
     playerName[i] = '\0';
     screenUpdate();
