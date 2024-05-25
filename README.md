@@ -23,3 +23,7 @@ make run
 - Ficar Vivo: O jogador deve evitar colidir com o topo da tela para permanecer vivo. Cada colisão com o topo resulta na perda de uma vida.
 - Vidas: O jogador começa com 3 vidas. Quando todas as vidas são perdidas, o jogo termina.
 - Pontuação: O jogador ganha pontos colidindo com diferentes blocos que aparecem no jogo. O score é exibido no canto superior direito da tela.
+
+- Screncast do Jogo Finalizado:
+  
+[Screencast from 2024-05-25 17-59-46.webm](https://github.com/paulo-rago/Projeto-GamePif/assets/149490954/17db1d7a-a800-4aa9-bcdc-e3698e7e26c4)
