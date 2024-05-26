@@ -28,7 +28,7 @@ make run
   
 ## Objetivos do Jogo
 
-Ao inciar a partida o player que é representado por "🔴" está localizado no chão enquanto plataformas aleatórias e flutuantes vão em direção ao topo da tela. 
+Ao iniciar a partida o player que é representado por "🔴" está localizado no chão enquanto plataformas aleatórias e flutuantes vão em direção ao topo da tela. 
 Para aumentar sua pontuação o jogador sobe nas plataformas e tenta pegar o máximo de moedas "🪙" que conseguir. Caso o jogador colida com o topo da tela,
 ele perde uma vida "❤️" (inicialmente ele obtém três vidas). Ao perder todas as vidas a tela de "Game Over" é mostrada e em seguida ele volta ao menu. 
 Caso sua pontuação seja uma das 10 melhores, será exibida na tela de Top Scores, ao lado de seu user digitado inicialmente.
