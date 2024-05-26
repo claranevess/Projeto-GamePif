@@ -8,10 +8,10 @@
 struct Player player;
 
 void InitializePlayer() {
-    player.x = MAXX / 2;
-    player.y = MINX; // O jogador começa na parte de baixo da tela
-    player.velocityY = 0;
-    player.onPlatform = 0;
+    player.x = MAXX / 2;       // Centraliza o jogador horizontalmente
+    player.y = MAXY / 2;       // Centraliza o jogador verticalmente
+    player.velocityY = 0;      // Inicializa a velocidade vertical como zero
+    player.onPlatform = 0;     // Inicializa o jogador não estando em uma plataforma
 }
 
 void MovePlayer(int direction) {
@@ -31,8 +31,7 @@ void ApplyGravity() {
             }
             player.y += player.velocityY; // atualiza a posição vertical do player
         } else {
-            player.y = MAXY - 1;
-            player.velocityY = 0; // reseta a velocidade vertical para zero caso o jogador atinja a parte inferior da tela
+            RebootBall(); // Reinicializa a bola ao atingir o chão
         }
     }
 }
@@ -59,19 +58,24 @@ void CheckCollision() {
                 struct Life *temp = lives_head;
                 lives_head = lives_head->next;
                 free(temp); // libera um nó da lista de vidas
-                if (lives_head == NULL) { // caso a lista esteja como NULL dá gameover
-                    game_over = 1; 
+                if (lives_head == NULL) {// caso a lista esteja como NULL dá gameover
+                    game_over = 1;
                     game_state = STATE_GAMEOVER;
                 }
             }
         } else {
-            player.y = MAXY - 2; // Move o jogador para o fundo da tela se ele não estava em uma plataforma
-            player.velocityY = 0;
+            RebootBall(); // Reinicializa a bola ao atingir o topo da tela
         }
-    } else if (player.y > MAXY - 1) { // verifica se o jogador ultrapassou o limite inferior da tela
-        player.y = MAXY - 1;
-        player.velocityY = 0;
+    } else if (player.y > MAXY - 1) {
+        RebootBall(); // Reinicializa a bola ao atingir o chão
     }
-
-    player.onPlatform = 0; // reseta o estado do jogador para não estar em uma plataforma
+    player.onPlatform = 0;
 }
+
+void RebootBall() {
+    player.x = MAXX / 2; // Reinicia a posição horizontal
+    player.y = MINY + 2; // Reinicia a posição vertical próximo ao topo da tela
+    player.velocityY = 0; // Reinicia a velocidade vertical
+    player.onPlatform = 0; // Reinicia o estado de estar sobre uma plataforma
+}
+

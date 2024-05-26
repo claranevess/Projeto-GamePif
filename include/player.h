@@ -14,5 +14,6 @@ void InitializePlayer();
 void MovePlayer();
 void ApplyGravity();
 void CheckCollision();
+void RebootBall(); // reboot
 
 #endif
