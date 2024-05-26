@@ -55,7 +55,7 @@ int main() {
                     ch = readch();
                     if (ch == 97) // 'a' key
                         direction = -1;
-                    else if (ch == 115) // 's' key
+                    else if (ch == 100) // 'd' key
                         direction = 1;
                 }
 

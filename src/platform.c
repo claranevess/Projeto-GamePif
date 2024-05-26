@@ -7,9 +7,9 @@
 struct Platform platforms[4];
 
 void InitializePlatforms() {
-    srand(time(0));
-    int gap = MAXX / 4;
-    for (int i = 0; i < 4; i++) {
+    srand(time(0));  // Inicializa o gerador de números aleatórios
+    int gap = MAXX / 4; // Calcula o espaço entre as plataformas
+    for (int i = 0; i < 4; i++) { // Loop para inicializar cada uma das 4 plataformas.
         platforms[i].x = i * gap + 2;
         platforms[i].y = MAXY - (i + 1) * 5;
         platforms[i].width = 15; // Tamanho da plataforma fixo em 15

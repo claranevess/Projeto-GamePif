@@ -127,7 +127,7 @@ void Draw() {
     for (int i = 0; i < 4; i++) {
         screenGotoxy(platforms[i].x, platforms[i].y);
         for (int j = 0; j < platforms[i].width; j++) {
-            printf("█"); // Alternativa com caractere ASCII
+            printf("█"); 
         }
     }
 
