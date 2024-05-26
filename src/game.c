@@ -58,7 +58,7 @@ void DrawMenu() {
     screenGotoxy(MAXX / 2 - 8, MAXY / 2 + 7);
     printf("A - Mover para a esquerda");
     screenGotoxy(MAXX / 2 - 8, MAXY / 2 + 8);
-    printf("S - Mover para a direita");
+    printf("D - Mover para a direita");
 
     screenUpdate();
 }
