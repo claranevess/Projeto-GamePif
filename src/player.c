@@ -15,24 +15,24 @@ void InitializePlayer() {
 }
 
 void MovePlayer(int direction) {
-    if (direction == -1 && player.x > MINX + 2) {
-        player.x -= 2;
-    } else if (direction == 1 && player.x < MAXX - 3) {
-        player.x += 2;
+    if (direction == -1 && player.x > MINX + 2) { // verifica se a direção é para esquerda 
+        player.x -= 2; // move o jogador duas posições por iteração para esquerda até mudar de direção
+    } else if (direction == 1 && player.x < MAXX - 3) { // verifica se é para direita 
+        player.x += 2; // move o jogador duas posições por iteração para direita até mudar de direção
     }
 }
 
 void ApplyGravity() {
-    if (!player.onPlatform) {
-        if (player.y < MAXY - 1) {
-            player.velocityY += 0.2;
-            if (player.velocityY > 1.0) { // Limite a velocidadeY
-                player.velocityY = 1.0;
+    if (!player.onPlatform) { // verfica se o player está sobre uma plataforma ou não
+        if (player.y < MAXY - 1) {// verifica se o jogar não atingiu o limite inferior da tela
+            player.velocityY += 0.2; // incrementa a velocidade vertical simulando a gravidade
+            if (player.velocityY > 1.0) { 
+                player.velocityY = 1.0; // limitar a velocidade vertical a um para que o player não caia muito rápido
             }
-            player.y += player.velocityY;
+            player.y += player.velocityY; // atualiza a posição vertical do player
         } else {
             player.y = MAXY - 1;
-            player.velocityY = 0;
+            player.velocityY = 0; // reseta a velocidade vertical para zero caso o jogador atinja a parte inferior da tela
         }
     }
 }

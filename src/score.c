@@ -3,7 +3,7 @@
 #include <string.h>
 #include "score.h"
 #include "screen.h"
-#include "game.h" // Inclua o cabeçalho onde score está definido
+#include "game.h" 
 
 struct Score scores[MAX_SCORES];
 extern char playerName[50]; // Declaração externa de playerName

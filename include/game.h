@@ -12,8 +12,8 @@
 #define STATE_GAME 1
 #define STATE_GAMEOVER 2
 
-extern int score; // Adicione esta linha
-extern int game_state; // Adicione esta linha
+extern int score; 
+extern int game_state; 
 extern int game_over;
 
 void InitializePlayer();

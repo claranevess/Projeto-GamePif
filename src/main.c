@@ -4,7 +4,7 @@
 #include "keyboard.h"
 #include "timer.h"
 #include "game.h"
-#include "life.h" // Inclua o cabeçalho onde a estrutura Life está definida
+#include "life.h"
 
 int main() {
     static int ch = 0;
@@ -27,7 +27,7 @@ int main() {
         switch (game_state) {
             case STATE_MENU:
                 DrawMenu();
-                while (ch != 10 && ch != 27 && ch != 116) { // ENTER key or ESC key or 'T' key
+                while (ch != 10 && ch != 27 && ch != 116) { // ENTER key ou ESC key ou 'T' key
                     if (keyhit()) {
                         ch = readch();
                     }
@@ -42,7 +42,7 @@ int main() {
                     ch = 0; // Resetar ch
                 } else if (ch == 116) { // 'T' key
                     DrawTopScores();
-                    while (ch != 10 && ch != 27) { // ENTER key or ESC key
+                    while (ch != 10 && ch != 27) { // ENTER key ou ESC key
                         if (keyhit()) {
                             ch = readch();
                         }

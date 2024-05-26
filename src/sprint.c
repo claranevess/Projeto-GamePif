@@ -2,8 +2,8 @@
 #include <time.h>
 #include "sprint.h"
 #include "screen.h"
-#include "player.h" // Inclua o cabeçalho onde player está definido
-#include "game.h" // Inclua o cabeçalho onde score está definido
+#include "player.h" 
+#include "game.h" 
 
 struct Sprint sprints[4];
 
