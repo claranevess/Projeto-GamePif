@@ -12,20 +12,6 @@
 #include "life.h"
 #include "score.h"
 
-#define MINX 1
-#define MINY 1
-
-// Cores da tela
-#define COLOR_PLAYER 6
-#define COLOR_PLATFORM 2
-#define COLOR_SCORE 14
-#define COLOR_SPRINT 5
-
-// Estados do jogo
-#define STATE_MENU 0
-#define STATE_GAME 1
-#define STATE_GAMEOVER 2
-
 int score = 0;
 int game_over = 0;
 int game_state = STATE_MENU;
