@@ -41,6 +41,7 @@ void updateTimerBasedOnScore(){
     if(score >= nextScore){
         timerInicial -= 10;
         nextScore += 50;
+        difficultyLevel++;
         if(timerInicial < 10){
             timerInicial = 10;
         }

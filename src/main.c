@@ -41,6 +41,7 @@ int main() {
                     timerInicial = 150;
                     nextScore = 50;
                     game_state = STATE_GAME;
+                    difficultyLevel = 1;
                     ch = 0; // Resetar ch
                 } else if (ch == 116) { // 'T' key
                     DrawTopScores();

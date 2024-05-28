@@ -29,6 +29,7 @@
 int score = 0;
 int game_over = 0;
 int game_state = STATE_MENU;
+int difficultyLevel = 1; // Nível de dificuldade inicial
 
 char playerName[50]; // Variável para armazenar o nome do jogador
 
@@ -144,6 +145,11 @@ void Draw() {
     screenSetColor(COLOR_SCORE, DARKGRAY);
     screenGotoxy(MAXX - 20, MINY + 2);
     printf("Pontuação: %d", score);
+
+    // Desenhar a pontuação
+    screenSetColor(COLOR_SCORE, DARKGRAY);
+    screenGotoxy(MAXX - 20, MINY + 3);
+    printf("Nível: %d", difficultyLevel);
 
     screenUpdate();
 }

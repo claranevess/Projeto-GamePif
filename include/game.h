@@ -17,7 +17,7 @@ extern int game_state;
 extern int game_over;
 extern int timerInicial;
 extern int nextScore;
-
+extern int difficultyLevel; // Nível de dificuldade
 
 void InitializePlayer();
 void InitializePlatforms();
@@ -39,5 +39,6 @@ void LoadScores();
 void DrawTopScores();
 void CheckNewScore();
 void RemoveUserScore();
+void updateTimerBasedOnScore();
 
 #endif
