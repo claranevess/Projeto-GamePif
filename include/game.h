@@ -15,6 +15,9 @@
 extern int score; 
 extern int game_state; 
 extern int game_over;
+extern int timerInicial;
+extern int nextScore;
+
 
 void InitializePlayer();
 void InitializePlatforms();
