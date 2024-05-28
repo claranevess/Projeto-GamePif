@@ -6,6 +6,8 @@
 #include "game.h" 
 
 struct Sprint sprints[4];
+int timerInicial = 150;
+int nextScore = 50;
 
 void InitializeSprints() {
     srand(time(0));
@@ -35,3 +37,12 @@ void DrawSprints() {
     }
 }
 
+void updateTimerBasedOnScore(){
+    if(score >= nextScore){
+        timerInicial -= 10;
+        nextScore += 50;
+        if(timerInicial < 10){
+            timerInicial = 10;
+        }
+    }
+}
