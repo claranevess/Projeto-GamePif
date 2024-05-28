@@ -85,6 +85,7 @@ void DrawSplashScreen() {
         // Não faça nada, apenas espere o timer expirar
     }
 }
+
 void DrawPlayerName(){
     screenClear();
     screenSetColor(COLOR_SCORE, DARKGRAY);

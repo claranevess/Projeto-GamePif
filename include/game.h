@@ -30,6 +30,7 @@ void DrawLives();
 void Draw();
 void DrawSprints();
 void DrawSplashScreen();
+void DrawPlayerName();
 void SaveScores();
 void LoadScores();
 void DrawTopScores();
