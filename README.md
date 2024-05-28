@@ -25,16 +25,19 @@ make run
 - teclar ENTER para iniciar a partida;
 - teclar "T" para exibir a tela de "top scores", onde é exibido as 10 melhores pontuações;
 - teclar "ESC" para parar de executar o jogo;
+- teclar "A" para movimentar o player esquerda e "D" para direita;
   
 ## Objetivos do Jogo
 
 Ao iniciar a partida o player que é representado por "🔴" está localizado no chão enquanto plataformas aleatórias e flutuantes vão em direção ao topo da tela. 
-Para aumentar sua pontuação o jogador sobe nas plataformas e tenta pegar o máximo de moedas "🪙" que conseguir. Caso o jogador colida com o topo da tela,
-ele perde uma vida "❤️" (inicialmente ele obtém três vidas). Ao perder todas as vidas a tela de "Game Over" é mostrada e em seguida ele volta ao menu. 
+Para aumentar sua pontuação o jogador sobe nas plataformas e tenta pegar o máximo de moedas "🪙" que conseguir. A cada 50 moedas a velocidade com que as plataformas
+e os sprints se movem são aumentados, assim dificultando a jogabilidade proporcionalmente. Caso o jogador colida com o topo da tela,ele perde uma vida "❤️" 
+(inicialmente ele obtém três vidas). Ao perder todas as vidas a tela de "Game Over" é mostrada e em seguida ele volta ao menu. 
 Caso sua pontuação seja uma das 10 melhores, será exibida na tela de Top Scores, ao lado de seu user digitado inicialmente.
 
 - Screncast do Jogo Finalizado:
-  
-https://github.com/paulo-rago/Projeto-GamePif/assets/149490954/50deb03a-6cc2-46fd-b2b9-a5c943a5966b
+
+https://github.com/paulo-rago/Projeto-GamePif/assets/149490954/72cf89d8-ae0e-41d9-9354-eec9908c2565
+
 
 
