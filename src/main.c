@@ -105,8 +105,5 @@ int main() {
         free(temp);
     }
 
-    // Remove o nome "VOCÊ" do arquivo de pontuações
-    RemoveUserScore();
-
     return 0;
 }
