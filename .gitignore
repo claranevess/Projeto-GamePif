@@ -24,4 +24,6 @@ Thumbs.db
 
 # Ignore scores file
 scores.txt
-rapidball.exe
+
+# Ignore .exe file
+jogo.exe
