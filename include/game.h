@@ -18,12 +18,13 @@ extern int game_over;
 extern int timerInicial;
 extern int nextScore;
 extern int difficultyLevel; // Nível de dificuldade
+extern int direction;
 
 void InitializePlayer();
 void InitializePlatforms();
 void InitializeSprints();
 void InitializeLives();
-void MovePlayer();
+void MovePlayer(int direction);
 void ApplyGravity();
 void CheckCollision();
 void CheckSprintCollision();
@@ -38,7 +39,6 @@ void SaveScores();
 void LoadScores();
 void DrawTopScores();
 void CheckNewScore();
-void RemoveUserScore();
 void updateTimerBasedOnScore();
 
 #endif

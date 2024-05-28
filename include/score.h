@@ -15,6 +15,5 @@ void SaveScores();
 void LoadScores();
 void DrawTopScores();
 void CheckNewScore();
-void RemoveUserScore();
 
 #endif
