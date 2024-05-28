@@ -6,6 +6,9 @@
 #include "game.h"
 #include "life.h"
 
+int timerInicial = 200;
+int nextScore = 50;
+
 int main() {
     static int ch = 0;
     int direction = 0;
@@ -38,6 +41,8 @@ int main() {
                     InitializeSprints(); // Inicializa os sprints
                     InitializeLives(); // Inicializa as vidas
                     score = 0; // Reinicia a pontuação
+                    timerInicial = 200;
+                    nextScore = 50;
                     game_state = STATE_GAME;
                     ch = 0; // Resetar ch
                 } else if (ch == 116) { // 'T' key
@@ -65,6 +70,7 @@ int main() {
                     ApplyGravity();
                     CheckCollision();
                     CheckSprintCollision(); // Verifica a colisão com os sprints
+                    updateTimer();
                     Draw();
                     // Reinicia o timer após desenhar a tela
                     timerUpdateTimer(100);
@@ -105,4 +111,14 @@ int main() {
     RemoveUserScore();
 
     return 0;
+}
+
+void updateTimer(){
+    if(score >= nextScore){
+        timerInicial -= 50;
+        nextScore += 50;
+        if(timerInicial < 10){
+            timerInicial = 10;
+        }
+    }
 }
