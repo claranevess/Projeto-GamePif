@@ -1,4 +1,4 @@
-# Rapid Ball
+# Rapid Ball 🔴
 Projeto do segundo período de Ciência da Computação na Cesar School da matéria de Programação Imperativa Funcional.
 
 ## Requisitos
@@ -25,7 +25,7 @@ make run
 - teclar ENTER para iniciar a partida;
 - teclar "T" para exibir a tela de "top scores", onde é exibido as 10 melhores pontuações;
 - teclar "ESC" para parar de executar o jogo;
-- teclar "A" para movimentar o player esquerda e "D" para direita;
+- teclar "A" para movimentar o player para esquerda e "D" para direita;
   
 ## Objetivos do Jogo
 
